@@ -1,93 +1,128 @@
 import streamlit as st
 
+# ===== Page Config =====
 st.set_page_config(
-    page_title="Air Quality & Health Chatbot",
+    page_title="AirWise – Air Quality & Health Chatbot",
     page_icon="☁️",
     layout="centered"
 )
 
-# Custom CSS (same design, better readability)
+# ===== Custom CSS =====
 st.markdown("""
 <style>
 .stApp {
     background-color: #f0f9ff;
 }
 
-h1, p, label {
-    color: #064e3b !important;
+/* Title */
+h1 {
+    color: #064e3b;
 }
 
+/* Chat bubbles */
+.bot {
+    background-color: #e6f7f1;
+    color: #064e3b;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.user {
+    background-color: #dbeafe;
+    color: #1e3a8a;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    text-align: right;
+}
+
+/* Input box */
 .stTextInput > div > div > input {
+    background-color: #f0fdfa;
     border: 2px solid #10b981;
     color: #064e3b;
 }
 </style>
 """, unsafe_allow_html=True)
 
-st.title("☁️ Air Quality & Health Chatbot")
+# ===== Header =====
+st.title("☁️ AirWise")
 
-st.markdown("<br>", unsafe_allow_html=True)
+# ===== Session State (with intro as first message) =====
+if "messages" not in st.session_state:
+    st.session_state.messages = [
+        {
+            "role": "bot",
+            "text": "Hi! I’m AirWise 🌬️. I help explain air quality and its effects on health and the environment. Ask me anything below."
+        }
+    ]
 
-st.markdown(
-    "<p>This chatbot explains how air quality affects human health in a clear and simple way.</p>",
-    unsafe_allow_html=True
-)
+# ===== Clear Chat Button =====
+if st.button("🗑️ Clear chat"):
+    st.session_state.messages = [
+        {
+            "role": "bot",
+            "text": "Hi! I’m AirWise 🌬️. Ask me anything about air quality and health."
+        }
+    ]
+    st.experimental_rerun()
 
-st.markdown("<br>", unsafe_allow_html=True)
+# ===== Display Chat Messages =====
+for msg in st.session_state.messages:
+    if msg["role"] == "user":
+        st.markdown(f"<div class='user'>{msg['text']}</div>", unsafe_allow_html=True)
+    else:
+        st.markdown(f"<div class='bot'>{msg['text']}</div>", unsafe_allow_html=True)
 
-question = st.text_input("💬 Type your question about air quality and health:")
-
-if question:
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.write("**Answer:**")
-    st.write(
-        "Air quality affects our lungs and heart. Poor air quality can lead to breathing problems, asthma, and other health issues."
-    )  
-
-# Chat Logic Function
+# ===== Chat Logic Function =====
 def get_bot_response(user_input):
-    user_input = user_input.lower()
-    
-    if "what is air pollution" in user_input or "define air pollution" in user_input:
-        return "Air pollution is the presence of harmful substances in the atmosphere, such as toxic gases, smoke, and dust, that can damage human health and the environment."
-    
-    elif "effects" in user_input and "pollution" in user_input:
-        return "Air pollution has serious effects: it causes breathing problems like asthma, harms plants and animals, and even contributes to climate change by trapping heat in the sky."
-    
-    elif "cause" in user_input or "garbage" in user_input or "burning" in user_input:
-        return "A major cause of air pollution is households burning garbage, which releases toxic chemicals. Other causes include smoke from factories, car exhaust, and forest fires."
-    
-    elif "how" in user_input and "quality" in user_input:
-        return "Air pollution directly lowers air quality by adding 'smog' and tiny particles (PM2.5) that make the air hazy and dangerous to breathe. High pollution means low air quality!"
-    
-    elif "quality" in user_input:
-        return "Air quality tells us how clean or polluted the air is. Clean air is essential for our health, as it helps our lungs and heart work properly!"
-    
-    elif "pollution" in user_input:
-        if "cause" in user_input or "why" in user_input:
-            return "Air pollution is caused by many things, including smoke from factories, exhaust from cars, burning trash, and even natural dust."
-        elif "harm" in user_input or "affect" in user_input or "bad" in user_input:
-            return "Air pollution harms you by entering your lungs and bloodstream. it can lead to immediate problems like stinging eyes and coughing, and long-term issues like asthma or heart disease."
-        return "Air pollution happens when harmful substances like smoke, chemicals, or dust get into the air, making it unsafe for people and nature."
-    
-    elif "cause" in user_input or "vehicle" in user_input or "factory" in user_input or "trash" in user_input or "dust" in user_input:
-        return "Common causes of air pollution include vehicle emissions, factory smoke, burning trash, and dust. These all release harmful particles into the sky."
-    
-    elif "health" in user_input or "cough" in user_input or "asthma" in user_input or "breathe" in user_input or "allergy" in user_input:
-        return "Dirty air can cause coughing, asthma attacks, breathing problems, and allergies. Long-term exposure can lead to serious health risks for our hearts and lungs."
-    
-    elif "daily" in user_input or "activity" in user_input or "outdoor" in user_input:
-        return "Poor air quality can limit outdoor activities like sports and play. It's important to check the air quality before spending a lot of time outside."
-    
-    elif "indoor" in user_input or "outdoor" in user_input:
-        return "Outdoor pollution comes from cars and factories, while indoor pollution can come from cooking smoke, dust, or pet dander. Both are important to watch!"
-    
-    elif "aqi" in user_input or "index" in user_input:
-        return "The Air Quality Index (AQI) is a scale used to report daily air quality. It tells you how clean or polluted your air is and what associated health effects might be a concern."
-    
-    elif "protect" in user_input or "mask" in user_input or "ventilate" in user_input:
-        return "To stay safe, you can wear a mask outside on smoggy days, avoid heavy exercise outdoors when the AQI is high, and keep your rooms well-ventilated."
-    
-    elif "improve" in user_input or "tree" in user_input or "transport" in user_input or "energy" in user_input:
-        return "We can help by planting trees, using public transport like buses or trains, saving energy at home, and never burning trash."
-        
+    q = user_input.lower()
+
+    if "what is air pollution" in q or "define air pollution" in q:
+        return "Air pollution is the presence of harmful substances like smoke, toxic gases, and dust in the air that can harm health and the environment."
+
+    elif "effects" in q and "pollution" in q:
+        return "Air pollution can cause asthma, coughing, breathing problems, and can damage plants, animals, and the climate."
+
+    elif "cause" in q or "burning" in q or "garbage" in q:
+        return "Air pollution is caused by burning trash, vehicle exhaust, factory smoke, and forest fires."
+
+    elif "air quality" in q:
+        return "Air quality tells us how clean or polluted the air is. Poor air quality makes breathing unsafe."
+
+    elif "health" in q or "asthma" in q or "cough" in q or "breathe" in q:
+        return "Poor air quality can cause coughing, asthma attacks, breathing difficulties, and heart problems."
+
+    elif "indoor" in q:
+        return "Indoor air pollution can come from cooking smoke, dust, or chemicals. Good ventilation helps improve indoor air quality."
+
+    elif "mask" in q:
+        return "Wearing a mask can help reduce the amount of polluted air you breathe, especially on days with poor air quality."
+
+    elif "improve" in q or "tree" in q or "transport" in q:
+        return "We can improve air quality by planting trees, using public transport, saving energy, and avoiding burning trash."
+
+    elif "aqi" in q:
+        return "The Air Quality Index (AQI) shows how polluted the air is and what health effects may occur."
+
+    else:
+        return "That’s a good question! Clean air is important because it keeps our lungs, heart, and environment healthy."
+
+# ===== Input (Bottom like ChatGPT) =====
+user_input = st.text_input("Type your question here:")
+
+if user_input:
+    st.session_state.messages.append({
+        "role": "user",
+        "text": user_input
+    })
+
+    response = get_bot_response(user_input)
+
+    st.session_state.messages.append({
+        "role": "bot",
+        "text": response
+    })
+
+    st.experimental_rerun()
