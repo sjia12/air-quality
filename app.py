@@ -20,7 +20,7 @@ st.markdown("""
         border-color: #10b981;
     }
     </style>
-    """, unsafe_index=True)
+    """, unsafe_allow_html=True)
 
 # Title and Description
 st.title("🌱 Air Quality & Health Chatbot")
