@@ -75,5 +75,4 @@ def get_bot_response(user_input):
     
     elif "improve" in user_input or "tree" in user_input or "transport" in user_input or "energy" in user_input:
         return "We can help by planting trees, using public transport like buses or trains, saving energy at home, and never burning trash."
-        elif "affect" in user_input or " our health" in user_input:
-        	return "Air quality affects our health because we breathe air into our bodies. Good air quality helps us stay healthy, while poor air quality can cause breathing problems and diseases."
+        
