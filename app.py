@@ -7,20 +7,36 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS for Blue/Green Theme
 st.markdown("""
-    <style>
-    .stApp {
-        background-color: #f0f9ff;
-    }
-    .main {
-        color: #064e3b;
-    }
-    .stTextInput > div > div > input {
-        border-color: #10b981;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+<style>
+/* App background */
+.stApp {
+    background-color: #f0f9ff;
+}
+
+/* Main text */
+h1, h2, h3, p, label, span {
+    color: #064e3b !important;
+}
+
+/* Subtitle / smaller text */
+small {
+    color: #065f46 !important;
+}
+
+/* Text input box */
+.stTextInput > div > div > input {
+    border: 2px solid #10b981;
+    color: #064e3b;
+    background-color: #ffffff;
+}
+
+/* Placeholder text */
+::placeholder {
+    color: #6b7280;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # Title and Description
 st.title("🌱 Air Quality & Health Chatbot")
