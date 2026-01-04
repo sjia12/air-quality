@@ -1,49 +1,48 @@
 import streamlit as st
 
-# Page Configuration
 st.set_page_config(
     page_title="Air Quality & Health Chatbot",
-    page_icon="🌱",
+    page_icon="☁️",
     layout="centered"
 )
 
+# Custom CSS (same design, better readability)
 st.markdown("""
 <style>
-/* App background */
 .stApp {
     background-color: #f0f9ff;
 }
 
-/* Main text */
-h1, h2, h3, p, label, span {
+h1, p, label {
     color: #064e3b !important;
 }
 
-/* Subtitle / smaller text */
-small {
-    color: #065f46 !important;
-}
-
-/* Text input box */
 .stTextInput > div > div > input {
     border: 2px solid #10b981;
     color: #064e3b;
-    background-color: #ffffff;
-}
-
-/* Placeholder text */
-::placeholder {
-    color: #6b7280;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Title and Description
-st.title("🌱 Air Quality & Health Chatbot")
-st.markdown("""
-Welcome to the **Air Quality & Health Chatbot**! I'm here to help you learn about the air we breathe and how to stay healthy. 
-Our mission is to promote **cleaner air for a healthier future**.
-""")
+st.title("☁️ Air Quality & Health Chatbot")
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+st.markdown(
+    "<p>This chatbot explains how air quality affects human health in a clear and simple way.</p>",
+    unsafe_allow_html=True
+)
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+question = st.text_input("💬 Type your question about air quality and health:")
+
+if question:
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.write("**Answer:**")
+    st.write(
+        "Air quality affects our lungs and heart. Poor air quality can lead to breathing problems, asthma, and other health issues."
+    )  
 
 # Chat Logic Function
 def get_bot_response(user_input):
