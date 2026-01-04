@@ -18,7 +18,7 @@ st.markdown("""
 /* Header */
 h1 {
     text-align: center;
-    color: #0ea5e9;
+    color: #0284c7;
     font-weight: 700;
 }
 
