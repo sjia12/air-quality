@@ -14,24 +14,32 @@ st.markdown("""
     background-color: #eef6ff;
 }
 
-/* Center title */
+/* Header */
 h1 {
     text-align: center;
     color: #0f172a;
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
-/* Clear chat button (top right) */
+/* Trash icon (top right, no background) */
 .clear-btn {
     position: fixed;
     top: 15px;
     right: 20px;
     z-index: 1000;
 }
+.clear-btn button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
 
 /* Bot message */
 .bot {
-    background-color: #bae6fd;
-    color: #0f172a;
+    background-color: #1e3a8a;   /* dark blue */
+    color: #f8fafc;              /* light text */
     padding: 14px;
     border-radius: 14px;
     margin-bottom: 10px;
@@ -45,9 +53,9 @@ h1 {
     padding: 14px;
     border-radius: 14px;
     margin-bottom: 10px;
-    text-align: right;
     margin-left: auto;
     max-width: 90%;
+    text-align: right;
 }
 
 /* Fixed input area */
@@ -56,10 +64,19 @@ h1 {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: #e0f2fe;
-    padding: 12px;
+    background: #ffffff;
+    padding: 14px;
     border-top: 2px solid #38bdf8;
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.08);
     z-index: 1000;
+}
+
+/* Input field */
+.stTextInput input {
+    border-radius: 12px;
+    padding: 10px;
+    border: 2px solid #38bdf8;
+    font-size: 16px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -73,24 +90,23 @@ if "messages" not in st.session_state:
         }
     ]
 
-# ===== Clear Chat Button (Icon Only) =====
-with st.container():
-    st.markdown('<div class="clear-btn">', unsafe_allow_html=True)
-    if st.button("🗑️"):
-        st.session_state.messages = [
-            {
-                "role": "bot",
-                "text": "Hi! I’m AirWise 🌬️. Ask me anything about air quality and health."
-            }
-        ]
-        st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
+# ===== Trash Button =====
+st.markdown('<div class="clear-btn">', unsafe_allow_html=True)
+if st.button("🗑️", key="clear"):
+    st.session_state.messages = [
+        {
+            "role": "bot",
+            "text": "Hi! I’m AirWise 🌬️. Ask me anything about air quality and health."
+        }
+    ]
+    st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
 
 # ===== Header =====
 st.title("☁️ AirWise")
 
 # ===== Chat Display =====
-st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
 
 for msg in st.session_state.messages:
     if msg["role"] == "user":
@@ -98,6 +114,7 @@ for msg in st.session_state.messages:
     else:
         st.markdown(f"<div class='bot'>{msg['text']}</div>", unsafe_allow_html=True)
 
+# Extra space so messages don’t hide behind input box
 st.markdown("<br><br><br><br>", unsafe_allow_html=True)
 
 # ===== Bot Logic =====
@@ -108,22 +125,22 @@ def get_bot_response(q):
         return "Air pollution is the presence of harmful substances like smoke, gases, and dust in the air that can harm people and the environment."
 
     elif "effects" in q:
-        return "Air pollution can cause asthma, coughing, breathing problems, and can damage plants, animals, and climate."
+        return "Air pollution can cause asthma, coughing, breathing problems, and harm plants and animals."
 
-    elif "cause" in q or "burning" in q:
-        return "Common causes include burning trash, vehicle exhaust, factory smoke, and forest fires."
+    elif "cause" in q:
+        return "Major causes include vehicle exhaust, burning trash, factory smoke, and forest fires."
 
     elif "health" in q:
-        return "Poor air quality affects the lungs and heart, especially in children and the elderly."
+        return "Poor air quality affects the lungs and heart, especially for children and older adults."
 
     elif "aqi" in q:
-        return "The Air Quality Index (AQI) shows how polluted the air is and what health effects may occur."
+        return "The Air Quality Index (AQI) shows how clean or polluted the air is."
 
     elif "improve" in q:
         return "We can improve air quality by planting trees, using public transport, and saving energy."
 
     else:
-        return "That’s a great question! Clean air helps keep people healthy and protects the environment."
+        return "That’s a great question! Clean air is important for both human health and the environment."
 
 # ===== Fixed Input Area =====
 st.markdown('<div class="input-box">', unsafe_allow_html=True)
