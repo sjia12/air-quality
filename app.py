@@ -11,13 +11,13 @@ st.set_page_config(
 st.markdown("""
 <style>
 .stApp {
-    background-color: #F0FFFF;
+    background-color: #ADD8E6;
 }
 
 /* Header */
 h1 {
     text-align: center;
-    color: #0047AB; /* dark blue */
+    color: #000080; /* dark blue */
     margin-top: 30px;
     margin-bottom: 20px;
 }
@@ -33,7 +33,7 @@ h1 {
 /* Bot message (dark blue) */
 .bot {
     background-color: #1e3a8a;
-    color: #6F8FAF;
+    color: #0F52BA;
     padding: 14px;
     border-radius: 14px;
     margin-bottom: 10px;
@@ -42,8 +42,8 @@ h1 {
 
 /* User message */
 .user {
-    background-color: #dcfce7;
-    color: #ADD8E6;
+    background-color: #A7C7E7;
+    color: #4169E1 ;
     padding: 14px;
     border-radius: 14px;
     margin-bottom: 10px;
