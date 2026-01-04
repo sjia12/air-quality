@@ -11,45 +11,60 @@ st.set_page_config(
 st.markdown("""
 <style>
 .stApp {
-    background-color: #f0f9ff;
+    background-color: #eef6ff;
 }
 
-/* Title */
+/* Center title */
 h1 {
-    color: #064e3b;
+    text-align: center;
+    color: #0f172a;
 }
 
-/* Chat bubbles */
+/* Clear chat button (top right) */
+.clear-btn {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* Bot message */
 .bot {
-    background-color: #e6f7f1;
-    color: #064e3b;
-    padding: 12px;
-    border-radius: 12px;
+    background-color: #bae6fd;
+    color: #0f172a;
+    padding: 14px;
+    border-radius: 14px;
     margin-bottom: 10px;
+    max-width: 90%;
 }
 
+/* User message */
 .user {
-    background-color: #dbeafe;
-    color: #1e3a8a;
-    padding: 12px;
-    border-radius: 12px;
+    background-color: #dcfce7;
+    color: #064e3b;
+    padding: 14px;
+    border-radius: 14px;
     margin-bottom: 10px;
     text-align: right;
+    margin-left: auto;
+    max-width: 90%;
 }
 
-/* Input box */
-.stTextInput > div > div > input {
-    background-color: #f0fdfa;
-    border: 2px solid #10b981;
-    color: #064e3b;
+/* Fixed input area */
+.input-box {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #e0f2fe;
+    padding: 12px;
+    border-top: 2px solid #38bdf8;
+    z-index: 1000;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ===== Header =====
-st.title("☁️ AirWise")
-
-# ===== Session State (with intro as first message) =====
+# ===== Session State =====
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {
@@ -58,71 +73,75 @@ if "messages" not in st.session_state:
         }
     ]
 
-# ===== Clear Chat Button =====
-if st.button("🗑️ Clear chat"):
-    st.session_state.messages = [
-        {
-            "role": "bot",
-            "text": "Hi! I’m AirWise 🌬️. Ask me anything about air quality and health."
-        }
-    ]
-    st.experimental_rerun()
+# ===== Clear Chat Button (Icon Only) =====
+with st.container():
+    st.markdown('<div class="clear-btn">', unsafe_allow_html=True)
+    if st.button("🗑️"):
+        st.session_state.messages = [
+            {
+                "role": "bot",
+                "text": "Hi! I’m AirWise 🌬️. Ask me anything about air quality and health."
+            }
+        ]
+        st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# ===== Display Chat Messages =====
+# ===== Header =====
+st.title("☁️ AirWise")
+
+# ===== Chat Display =====
+st.markdown("<br><br>", unsafe_allow_html=True)
+
 for msg in st.session_state.messages:
     if msg["role"] == "user":
         st.markdown(f"<div class='user'>{msg['text']}</div>", unsafe_allow_html=True)
     else:
         st.markdown(f"<div class='bot'>{msg['text']}</div>", unsafe_allow_html=True)
 
-# ===== Chat Logic Function =====
-def get_bot_response(user_input):
-    q = user_input.lower()
+st.markdown("<br><br><br><br>", unsafe_allow_html=True)
 
-    if "what is air pollution" in q or "define air pollution" in q:
-        return "Air pollution is the presence of harmful substances like smoke, toxic gases, and dust in the air that can harm health and the environment."
+# ===== Bot Logic =====
+def get_bot_response(q):
+    q = q.lower()
 
-    elif "effects" in q and "pollution" in q:
-        return "Air pollution can cause asthma, coughing, breathing problems, and can damage plants, animals, and the climate."
+    if "what is air pollution" in q:
+        return "Air pollution is the presence of harmful substances like smoke, gases, and dust in the air that can harm people and the environment."
 
-    elif "cause" in q or "burning" in q or "garbage" in q:
-        return "Air pollution is caused by burning trash, vehicle exhaust, factory smoke, and forest fires."
+    elif "effects" in q:
+        return "Air pollution can cause asthma, coughing, breathing problems, and can damage plants, animals, and climate."
 
-    elif "air quality" in q:
-        return "Air quality tells us how clean or polluted the air is. Poor air quality makes breathing unsafe."
+    elif "cause" in q or "burning" in q:
+        return "Common causes include burning trash, vehicle exhaust, factory smoke, and forest fires."
 
-    elif "health" in q or "asthma" in q or "cough" in q or "breathe" in q:
-        return "Poor air quality can cause coughing, asthma attacks, breathing difficulties, and heart problems."
-
-    elif "indoor" in q:
-        return "Indoor air pollution can come from cooking smoke, dust, or chemicals. Good ventilation helps improve indoor air quality."
-
-    elif "mask" in q:
-        return "Wearing a mask can help reduce the amount of polluted air you breathe, especially on days with poor air quality."
-
-    elif "improve" in q or "tree" in q or "transport" in q:
-        return "We can improve air quality by planting trees, using public transport, saving energy, and avoiding burning trash."
+    elif "health" in q:
+        return "Poor air quality affects the lungs and heart, especially in children and the elderly."
 
     elif "aqi" in q:
         return "The Air Quality Index (AQI) shows how polluted the air is and what health effects may occur."
 
+    elif "improve" in q:
+        return "We can improve air quality by planting trees, using public transport, and saving energy."
+
     else:
-        return "That’s a good question! Clean air is important because it keeps our lungs, heart, and environment healthy."
+        return "That’s a great question! Clean air helps keep people healthy and protects the environment."
 
-# ===== Input (Bottom like ChatGPT) =====
-user_input = st.text_input("Type your question here:")
+# ===== Fixed Input Area =====
+st.markdown('<div class="input-box">', unsafe_allow_html=True)
 
-if user_input:
-    st.session_state.messages.append({
-        "role": "user",
-        "text": user_input
-    })
+col1, col2 = st.columns([4, 1])
 
-    response = get_bot_response(user_input)
+with col1:
+    user_input = st.text_input("Ask AirWise a question", label_visibility="collapsed")
 
-    st.session_state.messages.append({
-        "role": "bot",
-        "text": response
-    })
+with col2:
+    send = st.button("Ask")
 
-    st.experimental_rerun()
+st.markdown('</div>', unsafe_allow_html=True)
+
+# ===== Send Message =====
+if send and user_input:
+    st.session_state.messages.append({"role": "user", "text": user_input})
+    st.session_state.messages.append(
+        {"role": "bot", "text": get_bot_response(user_input)}
+    )
+    st.rerun()
