@@ -43,7 +43,7 @@ h1 {
 /* User message */
 .user {
     background-color: #dcfce7;
-    color: #064e3b;
+    color: #89CFF0;
     padding: 14px;
     border-radius: 14px;
     margin-bottom: 10px;
