@@ -17,29 +17,23 @@ st.markdown("""
 /* Header */
 h1 {
     text-align: center;
-    color: #0f172a;
+    color: #1e3a8a; /* dark blue */
     margin-top: 30px;
     margin-bottom: 20px;
 }
 
-/* Trash icon (top right, no background) */
+/* Trash icon (top-right, away from header) */
 .clear-btn {
     position: fixed;
-    top: 15px;
+    top: 80px;
     right: 20px;
-    z-index: 1000;
-}
-.clear-btn button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
+    z-index: 2000;
 }
 
-/* Bot message */
+/* Bot message (dark blue) */
 .bot {
-    background-color: #1e3a8a;   /* dark blue */
-    color: #f8fafc;              /* light text */
+    background-color: #1e3a8a;
+    color: #f8fafc;
     padding: 14px;
     border-radius: 14px;
     margin-bottom: 10px;
@@ -86,61 +80,140 @@ if "messages" not in st.session_state:
     st.session_state.messages = [
         {
             "role": "bot",
-            "text": "Hi! I’m AirWise 🌬️. I help explain air quality and its effects on health and the environment. Ask me anything below."
+            "text": "Hi! I’m AirWise 🌬️. I help explain air quality and its effects on health and daily life. Ask me anything below."
         }
     ]
 
-# ===== Trash Button =====
+if "show_confirm" not in st.session_state:
+    st.session_state.show_confirm = False
+
+# ===== Clear Chat Button (with confirmation) =====
 st.markdown('<div class="clear-btn">', unsafe_allow_html=True)
-if st.button("🗑️", key="clear"):
-    st.session_state.messages = [
-        {
-            "role": "bot",
-            "text": "Hi! I’m AirWise 🌬️. Ask me anything about air quality and health."
-        }
-    ]
-    st.rerun()
+clear_clicked = st.button("🗑️", key="clear_chat")
 st.markdown('</div>', unsafe_allow_html=True)
+
+if clear_clicked:
+    st.session_state.show_confirm = True
+
+if st.session_state.show_confirm:
+    st.warning("Are you sure you want to clear the chat?")
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("Yes, clear"):
+            st.session_state.messages = [
+                {
+                    "role": "bot",
+                    "text": "Hi! I’m AirWise 🌬️. Ask me anything about air quality and health."
+                }
+            ]
+            st.session_state.show_confirm = False
+            st.rerun()
+
+    with col2:
+        if st.button("Cancel"):
+            st.session_state.show_confirm = False
+            st.rerun()
 
 # ===== Header =====
 st.title("☁️ AirWise")
 
 # ===== Chat Display =====
-st.markdown("<br>", unsafe_allow_html=True)
-
 for msg in st.session_state.messages:
     if msg["role"] == "user":
         st.markdown(f"<div class='user'>{msg['text']}</div>", unsafe_allow_html=True)
     else:
         st.markdown(f"<div class='bot'>{msg['text']}</div>", unsafe_allow_html=True)
 
-# Extra space so messages don’t hide behind input box
+# Space so messages don't hide behind input
 st.markdown("<br><br><br><br>", unsafe_allow_html=True)
 
-# ===== Bot Logic =====
+# ===== Bot Logic (Expanded Answers) =====
 def get_bot_response(q):
     q = q.lower()
 
-    if "what is air pollution" in q:
-        return "Air pollution is the presence of harmful substances like smoke, gases, and dust in the air that can harm people and the environment."
+    if "what is air pollution" in q or "define air pollution" in q:
+        return (
+            "Air pollution is the presence of harmful substances such as smoke, gases, "
+            "and fine particles in the air that can harm people, animals, and the environment."
+        )
 
-    elif "effects" in q:
-        return "Air pollution can cause asthma, coughing, breathing problems, and harm plants and animals."
+    elif "what is air quality" in q:
+        return (
+            "Air quality refers to how clean or polluted the air is. "
+            "Good air quality means the air is safe to breathe."
+        )
 
-    elif "cause" in q:
-        return "Major causes include vehicle exhaust, burning trash, factory smoke, and forest fires."
+    elif "how does air pollution affect our daily life" in q:
+        return (
+            "Air pollution affects daily life by causing coughing, headaches, and breathing problems. "
+            "It can limit outdoor activities, reduce visibility, and affect school and work."
+        )
 
-    elif "health" in q:
-        return "Poor air quality affects the lungs and heart, especially for children and older adults."
+    elif "how does air quality affect our daily life" in q:
+        return (
+            "Poor air quality can make it unsafe to go outside, especially for exercise. "
+            "It can affect sleep, productivity, and overall health."
+        )
 
-    elif "aqi" in q:
-        return "The Air Quality Index (AQI) shows how clean or polluted the air is."
+    elif "health" in q or "lungs" in q or "heart" in q:
+        return (
+            "Poor air quality harms the lungs and heart. "
+            "Long-term exposure can lead to asthma, heart disease, and other serious illnesses."
+        )
 
-    elif "improve" in q:
-        return "We can improve air quality by planting trees, using public transport, and saving energy."
+    elif "children" in q or "elderly" in q:
+        return (
+            "Children and older adults are more affected by air pollution because "
+            "their bodies are more sensitive to polluted air."
+        )
+
+    elif "cause" in q or "sources" in q:
+        return (
+            "Air pollution is caused by vehicle exhaust, factory emissions, burning trash, "
+            "forest fires, and natural dust."
+        )
+
+    elif "indoor" in q:
+        return (
+            "Indoor air pollution comes from cooking smoke, chemicals, dust, and mold. "
+            "Opening windows and proper ventilation help improve indoor air quality."
+        )
+
+    elif "outdoor" in q:
+        return (
+            "Outdoor air pollution mainly comes from vehicles, factories, and burning activities."
+        )
+
+    elif "aqi" in q or "air quality index" in q:
+        return (
+            "The Air Quality Index (AQI) shows how polluted the air is and what health effects "
+            "people may experience."
+        )
+
+    elif "protect" in q or "stay safe" in q or "mask" in q:
+        return (
+            "To stay safe, avoid outdoor activities during poor air quality days, "
+            "wear a mask if needed, and keep indoor air clean."
+        )
+
+    elif "improve" in q or "reduce pollution" in q:
+        return (
+            "Air pollution can be reduced by planting trees, using public transportation, "
+            "saving energy, and avoiding burning trash."
+        )
+
+    elif "environment" in q:
+        return (
+            "Air pollution damages plants, animals, and ecosystems. "
+            "It can reduce crop growth and harm wildlife."
+        )
 
     else:
-        return "That’s a great question! Clean air is important for both human health and the environment."
+        return (
+            "That’s a great question! Air quality affects our health, daily activities, "
+            "and the environment. Clean air helps everyone live better."
+        )
 
 # ===== Fixed Input Area =====
 st.markdown('<div class="input-box">', unsafe_allow_html=True)
