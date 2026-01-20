@@ -208,15 +208,15 @@ def airwise_response(question):
             "Good air quality means clean, safe air that supports health and outdoor activities. "
             "Bad air quality means polluted air that can cause illness, discomfort, and long-term health risks."
     )
-def ask_airwise():
-    user_input = entry.get().lower().strip()
+def airwise_response(user_input):
+    user_input = user_input.lower().strip()
 
     if user_input in knowledge_base:
-        result_label.config(text=knowledge_base[user_input])
+        return knowledge_base[user_input]
 
-    else:
-        result_label.config(
-            text="Hmm… that doesn’t seem related to air quality. Try keywords like AQI, pollution, or PM2.5!"
+    return (
+        "Hmm… that doesn’t seem related to air quality. "
+        "Try keywords like AQI, pollution, or PM2.5!"
     )
 # ---------------- DISPLAY CHAT ----------------
 for msg in st.session_state.messages:
