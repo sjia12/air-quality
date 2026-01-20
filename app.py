@@ -215,8 +215,7 @@ def airwise_response(user_input):
         if key in user_input:
             return knowledge_base[key]
 
-    return  "Hmm… that doesn’t seem related to air quality. "
-            "Try keywords like AQI, pollution, or PM2.5!"
+    return  "Hmm… that doesn’t seem related to air quality. Try keywords like AQI, pollution, or PM2.5!"
     )
 # ---------------- DISPLAY CHAT ----------------
 for msg in st.session_state.messages:
