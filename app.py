@@ -100,12 +100,59 @@ st.markdown("<h1>☁️ AirWise</h1>", unsafe_allow_html=True)
 if "confirm_clear" not in st.session_state:
     st.session_state.confirm_clear = False
 
+if "theme" not in st.session_state:
+    st.session_state.theme = "light"  # default
+
+
+# -----------------------------
+# SETTINGS (LIGHT / DARK)
+# -----------------------------
+with st.sidebar:
+    st.subheader("⚙ Settings")
+    st.session_state.theme = st.radio(
+        "Theme",
+        ["light", "dark"],
+        horizontal=True
+    )
+
+
+# -----------------------------
+# THEME STYLES
+# -----------------------------
+if st.session_state.theme == "dark":
+    trash_style = """
+        <style>
+        div[data-testid="stButton"] > button {
+            background-color: #1f2933;
+            color: white;
+            border: 1px solid #374151;
+        }
+        </style>
+    """
+else:
+    trash_style = """
+        <style>
+        div[data-testid="stButton"] > button {
+            background-color: white;
+            color: black;
+            border: 1px solid #d1d5db;
+        }
+        </style>
+    """
+
+# -----------------------------
+# CHAT HEADER
+# -----------------------------
 col1, col2 = st.columns([8, 1])
 
 with col2:
     if st.button("🗑️", key="trash"):
         st.session_state.confirm_clear = True
 
+
+# -----------------------------
+# CONFIRM CLEAR
+# -----------------------------
 if st.session_state.confirm_clear:
     st.warning("Clear all chat messages?")
 
