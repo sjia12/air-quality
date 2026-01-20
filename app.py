@@ -135,9 +135,9 @@ def airwise_response(question):
     if st.button("Ask"):
        q = question.lower().strip()
 
-    if q == "hello" or q == "hi" or q == "hey":
-        st.success("Hello! 👋 I'm your Air Quality Bot. How can I help you today?")
-
+    if q in ["hi", "hello", "hey", "wassup", "yo"]:
+        return "Hello! 👋 I'm AirWise. How can I help you today?"
+  
     elif q == "what is air pollution":
         st.success(
             "Air pollution is the presence of harmful substances in the air "
