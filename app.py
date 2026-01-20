@@ -222,15 +222,24 @@ for msg in st.session_state.messages:
         st.markdown(f"<div class='bot-msg'>{msg['content']}</div>", unsafe_allow_html=True)
 
 # ---------------- INPUT AREA ----------------
-st.markdown("<div class='input-area'>", unsafe_allow_html=True)
+st.divider()
 
-user_input = st.text_input("Ask AirWise a question", label_visibility="collapsed")
+user_input = st.text_input(
+    "Ask AirWise",
+    placeholder="Type your question here..."
+)
+
 send = st.button("➤ Ask")
 
-st.markdown("</div>", unsafe_allow_html=True)
-
 if send and user_input:
-    st.session_state.messages.append({"role": "user", "content": user_input})
+    st.session_state.messages.append(
+        {"role": "user", "content": user_input}
+    )
+
     reply = airwise_response(user_input)
-    st.session_state.messages.append({"role": "bot", "content": reply})
+
+    st.session_state.messages.append(
+        {"role": "bot", "content": reply}
+    )
+
     st.rerun()
