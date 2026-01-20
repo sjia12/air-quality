@@ -211,12 +211,12 @@ def airwise_response(question):
 def airwise_response(user_input):
     user_input = user_input.lower().strip()
 
-    if user_input in knowledge_base:
-        return knowledge_base[user_input]
+    for key in knowledge_base:
+        if key in user_input:
+            return knowledge_base[key]
 
-    return (
-        "Hmm… that doesn’t seem related to air quality. "
-        "Try keywords like AQI, pollution, or PM2.5!"
+    return  "Hmm… that doesn’t seem related to air quality. "
+            "Try keywords like AQI, pollution, or PM2.5!"
     )
 # ---------------- DISPLAY CHAT ----------------
 for msg in st.session_state.messages:
