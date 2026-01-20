@@ -83,14 +83,11 @@ st.markdown("""
     font-weight: bold;
 }
 
-/* Trash button */
-.trash-btn button {
-    background: none !important;
-    border: none !important;
+/* Trash button color */
+.trash button {
+    color: #0284c7 !important;   /* blue */
     font-size: 22px;
-    position: fixed;
-    top: 15px;
-    right: 20px;
+}
 }
 
 </style>
@@ -99,22 +96,29 @@ st.markdown("""
 # ---------------- HEADER ----------------
 st.markdown("<h1>☁️ AirWise</h1>", unsafe_allow_html=True)
 
-# ---------------- CLEAR CHAT BUTTON ----------------
+# ---------------- CLEAR CHAT ----------------
 if "confirm_clear" not in st.session_state:
     st.session_state.confirm_clear = False
 
-with st.container():
-    if st.button("🗑️", key="trash", help="Clear chat"):
+col1, col2 = st.columns([8, 1])
+
+with col2:
+    if st.button("🗑️", key="trash"):
         st.session_state.confirm_clear = True
 
 if st.session_state.confirm_clear:
     st.warning("Clear all chat messages?")
-    col1, col2 = st.columns(2)
-    if col1.button("Yes"):
+
+    c1, c2 = st.columns(2)
+
+    if c1.button("Yes"):
         st.session_state.messages = []
         st.session_state.confirm_clear = False
-    if col2.button("No"):
+        st.rerun()
+
+    if c2.button("No"):
         st.session_state.confirm_clear = False
+        st.rerun()
 
 # ---------------- INTRO ----------------
 st.markdown("""
