@@ -208,6 +208,7 @@ def airwise_response(question):
             "Good air quality means clean, safe air that supports health and outdoor activities. "
             "Bad air quality means polluted air that can cause illness, discomfort, and long-term health risks."
     )
+        
 def airwise_response(user_input):
     user_input = user_input.lower().strip()
 
