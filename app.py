@@ -134,90 +134,100 @@ if "messages" not in st.session_state:
 
 # ---------------- KNOWLEDGE BASE ----------------
 def airwise_response(question):
-    q = question.lower()
-    
-    if st.button("Ask"):
-       q = question.lower().strip()
+    q = question.lower().strip()
 
-    if q in ["hi", "hello", "hey", "wassup", "yo"]:
-        return "Hello! 👋 I'm AirWise. How can I help you today?"
-  
-    elif q == "what is air pollution":
-        st.success(
-            "Air pollution is the presence of harmful substances in the air "
-            "such as smoke, dust, and gases that can harm people and the environment."
+    # ---------------- GREETINGS ----------------
+    if q in ["hi", "hello", "hey", "yo", "wassup"]:
+        return "Hello! 👋 I'm AirWise ☁️ How can I help you today?"
+
+    # ---------------- BOT INFO ----------------
+    if q in ["who are you", "what is this bot", "bot description"]:
+        return (
+            "I am AirWise ☁️, an air quality chatbot designed to help students "
+            "understand air pollution, air quality, and their effects on daily life."
         )
 
-    elif q in ["who are you", "what is this bot", "bot description"]:
-        st.success(
-            "I am an Air Quality Chatbot created to help students understand "
-            "air pollution and air quality."
-        )
-
-    else:
-       st.warning("Sorry, I don't understand that yet.")
-  
+    # ---------------- BASIC CONCEPTS ----------------
     if "what is air pollution" in q:
-        return "Air pollution is the presence of harmful substances like smoke, chemicals, and tiny particles in the air that can harm humans, animals, and the environment."
+        return (
+            "Air pollution is the presence of harmful substances like smoke, gases, "
+            "and tiny particles in the air that can harm humans, animals, and the environment."
+        )
 
-    if "good air quality" in q:
-        return "Good air quality means the air is clean and safe to breathe, with very low levels of pollutants. It supports good health and outdoor activities."
-
-    if "bad air quality" in q:
-        return "Bad air quality means the air contains high levels of pollutants that can cause breathing problems, eye irritation, and other health issues."
-
-    if "air quality affect our daily life" in q:
-        return "Air quality affects how safe it is to go outside, exercise, travel, and even how productive we feel. Poor air quality can limit outdoor activities."
-
-    if "air pollution affect our daily life" in q:
-        return "Air pollution can cause coughing, headaches, fatigue, and can worsen asthma. It can also reduce visibility and damage buildings and crops."
-
-    if "health" in q:
-        return "Poor air quality can cause asthma, lung disease, heart problems, and can be especially dangerous for children and the elderly."
+    if "what is air quality" in q:
+        return (
+            "Air quality refers to how clean or polluted the air is. "
+            "Good air quality means safe air to breathe, while poor air quality can be harmful."
+        )
 
     if "aqi" in q:
-        return "AQI stands for Air Quality Index. It tells us how clean or polluted the air is and what health effects may occur."
+        return (
+            "AQI stands for Air Quality Index. It tells us how clean or polluted the air is "
+            "and what health effects may happen."
+        )
 
-    if "prevent" in q or "reduce" in q:
-        return "We can reduce air pollution by using public transport, saving electricity, avoiding burning trash, and planting trees."
+    # ---------------- GOOD vs BAD AIR QUALITY ----------------
+    if "good air quality" in q:
+        return (
+            "Good air quality means the air is clean and safe to breathe. "
+            "It helps people stay healthy and enjoy outdoor activities."
+        )
 
-    return "That’s a great question! Air quality affects our health, environment, and daily activities. Try asking about pollution, AQI, health effects, or prevention tips."
+    if "bad air quality" in q:
+        return (
+            "Bad air quality means the air contains many pollutants that can cause "
+            "breathing problems, coughing, and illness."
+        )
+
+    if "difference between good and bad air quality" in q or "compare good and bad air quality" in q:
+        return (
+            "Good air quality is clean and safe for health, while bad air quality is polluted "
+            "and can cause sickness and discomfort."
+        )
+
+    # ---------------- EFFECTS ----------------
     if "how does good air quality affect us" in q or "effects of good air quality" in q:
         return (
-            "Good air quality helps us breathe easily, stay active, and feel healthier. "
-            "It reduces the risk of asthma, allergies, and heart problems, improves sleep, "
-            "boosts concentration in school and work, and allows people to enjoy outdoor activities safely."
+            "Good air quality helps us breathe easily, stay active, focus better in school, "
+            "sleep well, and reduces the risk of diseases."
         )
 
     if "how does bad air quality affect us" in q or "effects of bad air quality" in q:
         return (
-            "Bad air quality can cause coughing, difficulty breathing, eye irritation, "
-            "headaches, and fatigue. Over time, it can lead to serious health problems such as "
-            "asthma, lung disease, heart conditions, and can be especially harmful to children and the elderly."
+            "Bad air quality can cause coughing, headaches, difficulty breathing, asthma, "
+            "lung disease, and heart problems, especially in children and the elderly."
         )
 
-    if "why is good air quality important" in q:
+    if "air quality affect our daily life" in q:
         return (
-            "Good air quality is important because clean air is essential for life. "
-            "It protects our lungs and heart, supports mental well-being, helps ecosystems thrive, "
-            "and improves overall quality of life."
+            "Air quality affects our daily activities such as going outside, exercising, "
+            "traveling, and even our mood and productivity."
         )
 
-    if "compare good and bad air quality" in q or "difference between good and bad air quality" in q:
+    if "air pollution affect our daily life" in q:
         return (
-            "Good air quality means clean, safe air that supports health and outdoor activities. "
-            "Bad air quality means polluted air that can cause illness, discomfort, and long-term health risks."
-    )
-        
-def airwise_response(user_input):
-    user_input = user_input.lower().strip()
+            "Air pollution can cause health problems, reduce visibility, damage crops, "
+            "and limit outdoor activities."
+        )
 
-    for key in knowledge_base:
-        if key in user_input:
-            return knowledge_base[key]
+    if "health" in q:
+        return (
+            "Poor air quality can cause asthma, lung infections, heart disease, "
+            "and other serious health problems."
+        )
 
-    return  "Hmm… that doesn’t seem related to air quality. Try keywords like AQI, pollution, or PM2.5!"
-    )
+    # ---------------- PREVENTION ----------------
+    if "prevent" in q or "reduce" in q:
+        return (
+            "We can reduce air pollution by using public transport, saving electricity, "
+            "avoiding burning trash, and planting trees."
+        )
+
+    # ---------------- DEFAULT ----------------
+    return (
+        "I'm still learning 🌱 Try asking about air pollution, AQI, "
+        "good or bad air quality, health effects, or prevention tips."
+        )
 # ---------------- DISPLAY CHAT ----------------
 for msg in st.session_state.messages:
     if msg["role"] == "user":
