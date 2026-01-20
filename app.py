@@ -154,7 +154,21 @@ with col2:
 # CONFIRM CLEAR
 # -----------------------------
 if st.session_state.confirm_clear:
-    st.warning("Clear all chat messages?")
+
+    st.markdown(
+        """
+        <div style="
+            background-color:#1f2933;
+            color:white;
+            padding:12px;
+            border-radius:8px;
+            font-weight:600;
+            ">
+            🗑️ Clear all chat messages?
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     c1, c2 = st.columns(2)
 
