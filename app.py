@@ -120,8 +120,7 @@ if st.session_state.confirm_clear:
 st.markdown("""
 <div class="intro-box">
 Hi! I’m <b>AirWise ☁️</b>.  
-I explain air quality, air pollution, and how they affect our daily lives and health.  
-Ask me anything below.
+Ask me about air quality, air pollution, and how they affect our daily lives!
 </div>
 """, unsafe_allow_html=True)
 
@@ -132,7 +131,28 @@ if "messages" not in st.session_state:
 # ---------------- KNOWLEDGE BASE ----------------
 def airwise_response(question):
     q = question.lower()
+    
+    if st.button("Ask"):
+       q = question.lower().strip()
 
+    if q == "hello" or q == "hi" or q == "hey":
+        st.success("Hello! 👋 I'm your Air Quality Bot. How can I help you today?")
+
+    elif q == "what is air pollution":
+        st.success(
+            "Air pollution is the presence of harmful substances in the air "
+            "such as smoke, dust, and gases that can harm people and the environment."
+        )
+
+    elif q in ["who are you", "what is this bot", "bot description"]:
+        st.success(
+            "I am an Air Quality Chatbot created to help students understand "
+            "air pollution and air quality."
+        )
+
+    else:
+       st.warning("Sorry, I don't understand that yet.")
+  
     if "what is air pollution" in q:
         return "Air pollution is the presence of harmful substances like smoke, chemicals, and tiny particles in the air that can harm humans, animals, and the environment."
 
@@ -192,7 +212,7 @@ def ask_airwise():
 
     else:
         result_label.config(
-            text="Hmm… that doesn’t seem related to air quality. Try keywords like AQI, pollution, or PM2.5 😊"
+            text="Hmm… that doesn’t seem related to air quality. Try keywords like AQI, pollution, or PM2.5!"
     )
 # ---------------- DISPLAY CHAT ----------------
 for msg in st.session_state.messages:
@@ -213,4 +233,4 @@ if send and user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
     reply = airwise_response(user_input)
     st.session_state.messages.append({"role": "bot", "content": reply})
-    st.experimental_rerun()
+    st.rerun()
